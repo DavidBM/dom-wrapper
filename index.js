@@ -98,7 +98,9 @@
 
 		var descriptor = Object.getOwnPropertyDescriptor(CACHED_ELEMENTS[tagName], attrName);
 
-		if(typeof descriptor === 'undefined') return;
+		if(typeof descriptor === 'undefined') descriptor = {
+			enumerable: true
+		};
 
 		descriptor.get = function () {
 			return this.element[attrName];
