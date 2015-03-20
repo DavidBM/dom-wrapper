@@ -39,12 +39,6 @@
 			}
 
 			TAGS[tagName] = createElementWrapper(functions, attributes, tagName, wrappers);
-
-			wrappers.push({
-				functions: functions,
-				attributes: attributes,
-				tagFunction: TAGS[tagName]
-			});
 		}
 	}
 
@@ -66,7 +60,7 @@
 		}
 
 		if(existentTagFunction !== false) {
-			ElementWrapper.prototype = Object.create(existentTagFunction);
+			ElementWrapper.prototype = Object.create(existentTagFunction.prototype);
 			ElementWrapper.prototype.contructor = ElementWrapper;
 		}else{
 			for (var i = functions.length - 1; i >= 0; i--) {
@@ -74,6 +68,12 @@
 
 				ElementWrapper.prototype[functionName] = getFunction(functionName);
 			}
+
+			wrappers.push({
+				functions: functions,
+				attributes: attributes,
+				tagFunction: ElementWrapper
+			});
 		}
 
 		return ElementWrapper;
@@ -115,7 +115,7 @@
 
 	function checkIfExist (functions, attributes, wrappers) {
 		for (var i = wrappers.length - 1; i >= 0; i--) {
-			wrapper = wrappers[i];
+			var wrapper = wrappers[i];
 
 			if(arrayEquals(wrapper.functions, functions) && arrayEquals(wrapper.functions, functions))
 				return wrapper.tagFunction;
