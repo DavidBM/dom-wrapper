@@ -1,5 +1,5 @@
 {
-  "name": "Dom Wrapper",
+  "name": "dom-wrapper",
   "version": "0.1.1",
   "description": "An extensible DOM Wrapper that adds a facilities for use DOM in JavaScript.",
   "private": false,
@@ -8,6 +8,6 @@
   "license": "MIT",
   "repository": {
     "type" : "git",
-    "url" : "https://github.com/DavidBM/Dom-Wrapper.git"
+    "url" : "https://github.com/DavidBM/dom-wrapper.git"
   }
 }
