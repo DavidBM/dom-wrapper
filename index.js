@@ -1,7 +1,7 @@
 (function () {
 	'use strinct';
 
-	//TODO -> Añadir las funciones complementarias (addChild, etc) y crear sistema de plugins.
+	//TODO: Añadir las funciones complementarias (addChild, etc) y crear sistema de plugins.
 
 	var HTML_ELEMENTS = require('./htmlElementsTags.js');
 	var arrayEquals = require('./arrayEquals.js');
@@ -13,10 +13,13 @@
 	var CACHED_ELEMENTS;
 
 	function createAllElements () {
+		var cachedElements = [];
 		for (var i = HTML_ELEMENTS.length - 1; i >= 0; i--) {
 			var tagName = HTML_ELEMENTS[i];
-			CACHED_ELEMENTS[tagName] = document.createElement(tagName);
+			cachedElements[tagName] = document.createElement(tagName);
 		}
+
+		return cachedElements;
 	}
 
 	function createTags () {
