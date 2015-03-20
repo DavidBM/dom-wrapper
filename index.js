@@ -43,17 +43,15 @@
 			wrappers.push({
 				functions: functions,
 				attributes: attributes,
-				tagName: tagName
+				tagFunction: TAGS[tagName]
 			});
 		}
 	}
 
 	function createElementWrapper (functions, attributes, tagName, wrappers) {
-		var existentTagName = checkIfExist(functions, attributes, wrappers);
+		var existentTagFunction = checkIfExist(functions, attributes, wrappers);
 
-		if(existentTagName !== false) return TAGS[existentTagName];
-
-		var obj = function ElementWrapper () {
+		function ElementWrapper () {
 			if (!(this instanceof ElementWrapper)) return new ElementWrapper();
 
 			this.element = document.createElement(tagName);
@@ -65,15 +63,20 @@
 			}
 
 			return this;
-		};
-
-		for (var i = functions.length - 1; i >= 0; i--) {
-			var functionName = functions[i];
-
-			obj.prototype[functionName] = getFunction(functionName);
 		}
 
-		return obj;
+		if(existentTagFunction !== false) {
+			ElementWrapper.prototype = Object.create(existentTagFunction);
+			ElementWrapper.prototype.contructor = ElementWrapper;
+		}else{
+			for (var i = functions.length - 1; i >= 0; i--) {
+				var functionName = functions[i];
+
+				ElementWrapper.prototype[functionName] = getFunction(functionName);
+			}
+		}
+
+		return ElementWrapper;
 	}
 
 	function getFunction (functionName) {
@@ -115,7 +118,7 @@
 			wrapper = wrappers[i];
 
 			if(arrayEquals(wrapper.functions, functions) && arrayEquals(wrapper.functions, functions))
-				return wrapper.tagName;
+				return wrapper.tagFunction;
 		}
 
 		return false;
