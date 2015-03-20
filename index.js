@@ -51,7 +51,7 @@
 	function createElementWrapper (functions, attributes, tagName, wrappers) {
 		var existentTagName = checkIfExist(functions, attributes, wrappers);
 
-		if(exist !== false) return TAGS[existentTagName];
+		if(existentTagName !== false) return TAGS[existentTagName];
 
 		var obj = function ElementWrapper () {
 			if (!(this instanceof ElementWrapper)) return new ElementWrapper();
@@ -115,6 +115,8 @@
 			if(arrayEquals(wrapper.functions, functions) && arrayEquals(wrapper.functions, functions))
 				return wrapper.tagName;
 		}
+
+		return false;
 	}
 
 	CACHED_FUNCTIONS = {};
