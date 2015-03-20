@@ -61,7 +61,7 @@
 			for (var j = attributes.length - 1; j >= 0; j--) {
 				var attrName = attributes[j];
 
-				setAttributeFunction(this, attrName);
+				setAttributeFunction(this, attrName, tagName);
 			}
 
 			return this;
@@ -88,7 +88,7 @@
 		return fn;
 	}
 
-	function setAttributeFunction (obj, attrName) {
+	function setAttributeFunction (obj, attrName, tagName) {
 		if(typeof CACHED_ATTRIBUTE_FUNCTIONS[attrName] === 'function') return CACHED_ATTRIBUTE_FUNCTIONS[attrName];
 
 		var descriptor = Object.getOwnPropertyDescriptor(CACHED_ELEMENTS[tagName], attrName);
