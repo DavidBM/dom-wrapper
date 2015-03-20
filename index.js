@@ -89,7 +89,9 @@
 	}
 
 	function setAttributeFunction (obj, attrName, tagName) {
-		if(typeof CACHED_ATTRIBUTE_FUNCTIONS[attrName] === 'function') return CACHED_ATTRIBUTE_FUNCTIONS[attrName];
+		if(typeof CACHED_ATTRIBUTE_FUNCTIONS[attrName] !== 'undefined') {
+			Object.defineProperty(obj, attrName, CACHED_ATTRIBUTE_FUNCTIONS[attrName]);
+		}
 
 		var descriptor = Object.getOwnPropertyDescriptor(CACHED_ELEMENTS[tagName], attrName);
 
@@ -103,9 +105,7 @@
 
 		Object.defineProperty(obj, attrName, descriptor);
 
-		CACHED_ATTRIBUTE_FUNCTIONS[attrName] = fn;
-
-		return fn;
+		CACHED_ATTRIBUTE_FUNCTIONS[attrName] = descriptor;
 	}
 
 	function checkIfExist (functions, attributes, wrappers) {
@@ -127,8 +127,7 @@
 
 	HTML_ELEMENTS = null;
 	CACHED_FUNCTIONS = null;
-	CACHED_ELEMENTS = null;
-	//We don't clean CACHED_ATTRIBUTE_FUNCTIONS because we use it in the contructor for the attributes.
+	//We don't clean CACHED_ATTRIBUTE_FUNCTIONS and CACHED_ELEMENTS because we use it in the contructor for the attributes.
 
 	if(typeof module !== 'undefined' && module.exports){
 		module.exports = exports = TAGS;
