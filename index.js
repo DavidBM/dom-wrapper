@@ -13,7 +13,7 @@
 	var CACHED_ELEMENTS;
 
 	function createAllElements () {
-		var cachedElements = [];
+		var cachedElements = {};
 		for (var i = HTML_ELEMENTS.length - 1; i >= 0; i--) {
 			var tagName = HTML_ELEMENTS[i];
 			cachedElements[tagName] = document.createElement(tagName);
