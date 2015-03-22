@@ -15,22 +15,22 @@ function get () {
 }
 
 function add () {
-	this.element.add.apply(this.element, arguments);
+	this.element.classList.add.apply(this.element, arguments);
 	return this;
 }
 
 function remove () {
-	this.element.remove.apply(this.element, arguments);
+	this.element.classList.remove.apply(this.element, arguments);
 	return this;
 }
 
 function toggle () {
-	this.element.toggle.apply(this.element, arguments);
+	this.element.classList.toggle.apply(this.element, arguments);
 	return this;
 }
 
 function contains () {
-	return this.element.contains.apply(this.element, arguments);
+	return this.element.classList.contains.apply(this.element, arguments);
 }
 
 
