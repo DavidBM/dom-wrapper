@@ -1,0 +1,18 @@
+{
+  "node": true,
+  "browser": true,
+  "esnext": true,
+  "camelcase": true, //This option allows you to force all variable names to use either camelCase style or UPPER_CASE with underscores.
+  "eqeqeq": true, //This options prohibits the use of == and != in favor of === and !==
+  "immed": true, //This option prohibits the use of immediate function invocations without wrapping them in parentheses.
+  "indent": 4, //This option sets a specific tab width for your code.
+  "maxcomplexity": 6, //This option lets you control cyclomatic complexity throughout your code.
+  "noarg": true, //This option prohibits the use of arguments.caller and arguments.callee
+  "noempty": true, //This option warns when you have an empty block in your code.
+  "undef": true, //This option prohibits the use of explicitly undeclared variables
+  "unused": "vars", //This option warns when you define and never use your variables.
+  "strict": true, //This option requires all functions to run in ECMAScript 5's strict mode,
+  "validthis": true,
+  "newcap": false, //This option requires you to capitalize names of constructor functions
+  "predef": [ "Promise", "CharacterData" ] //Elimina las alertas si se sobreescribe la palabra Promise
+}
