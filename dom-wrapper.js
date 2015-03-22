@@ -39,7 +39,7 @@ function createElementWrapper (tagName) {
 		return this;
 	}
 
-	ElementWrapper.prototype = EngineElement.prototype;
+	ElementWrapper.prototype = Object.create(EngineElement.prototype);
 	ElementWrapper.prototype.constructor = ElementWrapper;
 
 	return ElementWrapper;
@@ -52,14 +52,14 @@ engine.setDocument = function (newDocument) {
 
 //Core wrapper utilities
 engine.injectPlugin = function (name, injectFunction) {
-	if(plugins[name] !== "undefined") return;
+	if(typeof plugins[name] !== "undefined") return;
 
 	plugins[name] = injectFunction;
 	EngineElement.prototype[name] = injectFunction;
 };
 
 engine.createTag = function (tagName, postFunction) {
-	if(plugins[name] !== "undefined") return;
+	if(typeof plugins[name] !== "undefined") return;
 
 	var wrapper = createElementWrapper(tagName);
 
