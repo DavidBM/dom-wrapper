@@ -29,7 +29,7 @@ for (var i = HTML_ELEMENTS.length - 1; i >= 0; i--) {
 function createElementWrapper (tagName) {
 
 	function ElementWrapper (className) {
-		if (!(this instanceof ElementWrapper)) return new ElementWrapper();
+		if (!(this instanceof ElementWrapper)) return new ElementWrapper(className);
 
 		this.element = doc.createElement(tagName);
 
