@@ -39,7 +39,7 @@ function createElementWrapper (tagName) {
 		return this;
 	}
 
-	ElementWrapper.prototype = Object.create(EngineElement.prototype);
+	ElementWrapper.prototype = EngineElement.prototype;
 	ElementWrapper.prototype.constructor = ElementWrapper;
 
 	return ElementWrapper;
