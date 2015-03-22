@@ -1,7 +1,7 @@
 (function () {
-	'use strinct';
+	'use strict';
 
-	//TODO: Añadir las funciones complementarias (addChild, etc) y crear sistema de plugins.
+	//TODO: Añadir las funciones complementarias (addChild, etc) y crear sistema de plugins. Poner solo los atributos necesarios en cada elemento y no todos.
 
 	var HTML_ELEMENTS = require('./htmlElementsTags.js');
 	var arrayEquals = require('./arrayEquals.js');
@@ -93,7 +93,7 @@
 
 	function setAttributeFunction (obj, attrName, tagName) {
 		if(typeof CACHED_ATTRIBUTE_FUNCTIONS[attrName] !== 'undefined') {
-			Object.defineProperty(obj, attrName, CACHED_ATTRIBUTE_FUNCTIONS[attrName]);
+			return Object.defineProperty(obj, attrName, CACHED_ATTRIBUTE_FUNCTIONS[attrName]);
 		}
 
 		var descriptor = Object.getOwnPropertyDescriptor(CACHED_ELEMENTS[tagName], attrName);
