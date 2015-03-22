@@ -1,16 +1,22 @@
 'use strict';
+var debug = require('debug')('dom-wrapper');
 
 //TODO: Añadir las funciones complementarias (addChild, etc) y crear sistema de plugins.
 //Poner solo los atributos necesarios en cada elemento y no todos. Lo mismo con las funciones. El enfoque de copiarlo todo es muy lento.
 
 var HTML_ELEMENTS = require('./htmlElementsTags.js');
 
-var doc = document || {};
+var doc;
+if(typeof document !== 'undefined')
+	doc = document;
+else
+	doc = {createElement: function(){ debug('No document. Use setDocument for inject a document'); }};
 
 var engine = {};
 var plugins = {};
+
 function EngineElement () {}
-EngineElement.prototype.debug = require('debug')('dom-wrapper');
+EngineElement.prototype.debug = debug;
 EngineElement.prototype.get = function(){ return this.element; };
 
 //Make all wrappers for tags
@@ -40,6 +46,11 @@ function createElementWrapper (tagName) {
 }
 
 //Core wrapper utilities
+engine.setDocument = function (newDocument) {
+	doc = newDocument;
+};
+
+//Core wrapper utilities
 engine.injectPlugin = function (name, injectFunction) {
 	if(plugins[name] !== "undefined") return;
 
@@ -52,18 +63,18 @@ engine.createTag = function (tagName, postFunction) {
 
 	var wrapper = createElementWrapper(tagName);
 
-	if(typeof postFunction === 'function'){
-		engine[tagName] = function () {
-			var result = new wrapper();
-			var args = argumentsToArray(arguments);
-			args.unshift(doc);
-			postFunction.apply(result, args);
-			return result;
-		};
-		return;
+	if(typeof postFunction !== 'function'){
+		engine[tagName] = wrapper;
+		return wrapper;
 	}
 
-	engine[tagName] = wrapper;
+	engine[tagName] = function () {
+		var result = new wrapper();
+		var args = argumentsToArray(arguments);
+		args.unshift(doc);
+		postFunction.apply(result, args);
+		return result;
+	};
 };
 
 function argumentsToArray (args) {
