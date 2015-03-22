@@ -54,8 +54,8 @@ engine.setDocument = function (newDocument) {
 engine.injectPlugin = function (name, injectFunction) {
 	if(plugins[name] !== "undefined") return;
 
-	plugins[name] = injectFunction();
-	injectFunction(engine, EngineElement.prototype);
+	plugins[name] = injectFunction;
+	EngineElement.prototype[name] = injectFunction;
 };
 
 engine.createTag = function (tagName, postFunction) {
