@@ -1,9 +1,6 @@
 'use strict';
 var debug = require('debug')('dom-wrapper');
 
-//TODO: Añadir las funciones complementarias (addChild, etc) y crear sistema de plugins.
-//Poner solo los atributos necesarios en cada elemento y no todos. Lo mismo con las funciones. El enfoque de copiarlo todo es muy lento.
-
 var HTML_ELEMENTS = require('./htmlElementsTags.js');
 
 var doc;
@@ -15,16 +12,16 @@ else
 var engine = {};
 var plugins = {};
 
-function EngineElement () {}
-EngineElement.prototype.debug = debug;
-EngineElement.prototype.get = function(){ return this.element; };
-
 //Make all wrappers for tags
 for (var i = HTML_ELEMENTS.length - 1; i >= 0; i--) {
 	var tagName = HTML_ELEMENTS[i];
 
 	engine[tagName] = createElementWrapper(tagName);
 }
+
+function EngineElement () {}
+EngineElement.prototype.debug = debug;
+EngineElement.prototype.get = function(){ return this.element; };
 
 function createElementWrapper (tagName) {
 
@@ -50,7 +47,6 @@ engine.setDocument = function (newDocument) {
 	doc = newDocument;
 };
 
-//Core wrapper utilities
 engine.injectPlugin = function (name, injectFunction) {
 	if(typeof plugins[name] !== "undefined") return;
 
