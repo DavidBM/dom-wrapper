@@ -21,7 +21,7 @@ or copy the bundle/dom-wrapper.min.js to your project and then use `window.DomWr
 
 	'use strict';
 
-	var d = require('dom-wrapper');
+	var d = require('dom-wrapper'); //or var d = DomWrapper; if you don't use CommonJS
 
 	var references = {};
 
@@ -78,7 +78,7 @@ or copy the bundle/dom-wrapper.min.js to your project and then use `window.DomWr
 `main.js`
 ``` javascript
 
-	var domWrapper = require('dom-wrapper');
+	var domWrapper = require('dom-wrapper'); //or var d = DomWrapper; if you don't use CommonJS
 	require('text.js')(domWrapper);
 
 ```
@@ -127,7 +127,7 @@ The DOM element is accessible via `this.element`
 
 	'use strict';
 
-	var d = require('dom-wrapper');
+	var d = require('dom-wrapper'); //or var d = DomWrapper; if you don't use CommonJS
 
 	function form (document, className) {
 		this.references = {};
@@ -161,7 +161,7 @@ And then:
 `main.js`
 ``` javascript
 
-	var domWrapper = require('dom-wrapper');
+	var domWrapper = require('dom-wrapper'); //or var d = DomWrapper; if you don't use CommonJS
 	require('simpleForm.js')(domWrapper);
 
 ```
@@ -177,7 +177,7 @@ You can use `setDocument()` for suply a alternative implementor of DOM interface
 	'use strict';
 
 	var document = require('my-document-implementor');
-	var d = require('dom-wrapper').setDocument(document);
+	var d = require('dom-wrapper').setDocument(document);  //or var d = DomWrapper.setDocument(document); if you don't use CommonJS
 
 ```
 
@@ -191,7 +191,7 @@ _Note: The `with` statement is forbidden with `'use strict'`._
 
 ``` javascript
 
-	var d = require('dom-wrapper')
+	var d = require('dom-wrapper'); //or var d = DomWrapper; if you don't use CommonJS
 
 	var dom;
 
