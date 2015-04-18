@@ -7,6 +7,14 @@ It's a small and powerful core with a plugins system that can extend almost ever
 
 You can create new HTML tags, new methods and reusable modules with complex templates and logic.
 
+## Installing
+
+`npm install dom-wrapper`
+
+or copy the bundle/dom-wrapper.min.js to your project and then use `window.DomWrapper`
+
+(if you're not using browserify similar tools, you do not know what you're missing: [Why to use browserify?](http://word.bitly.com/post/101360133837/browserify) ).
+
 ## A template example
 
 ``` javascript

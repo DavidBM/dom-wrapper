@@ -21,7 +21,7 @@
 	}
 })();
 
-},{"./dom-wrapper.js":2,"./plugins/add.js":7,"./plugins/attr.js":8,"./plugins/class.js":9,"./plugins/remove.js":10,"./plugins/style.js":11,"./plugins/text.js":12,"./plugins/utils.js":13,"./tags/text.js":14}],2:[function(require,module,exports){
+},{"./dom-wrapper.js":2,"./plugins/add.js":4,"./plugins/attr.js":5,"./plugins/class.js":6,"./plugins/remove.js":7,"./plugins/style.js":8,"./plugins/text.js":9,"./plugins/utils.js":10,"./tags/text.js":11}],2:[function(require,module,exports){
 'use strict';
 var debug = require('debug')('dom-wrapper');
 
@@ -69,6 +69,7 @@ function createElementWrapper (tagName) {
 //Core wrapper utilities
 engine.setDocument = function (newDocument) {
 	doc = newDocument;
+	return this;
 };
 
 engine.injectPlugin = function (name, injectFunction) {
@@ -109,10 +110,250 @@ function argumentsToArray (args) {
 
 module.exports = exports = engine;
 
-},{"./htmlElementsTags.js":3,"debug":4}],3:[function(require,module,exports){
+},{"./htmlElementsTags.js":3,"debug":12}],3:[function(require,module,exports){
 module.exports = exports = ['a', 'abbr', 'acronym', 'address', 'applet', 'area', 'article', 'aside', 'audio', 'b', 'base', 'basefont', 'bdi', 'bdo', 'bgsound', 'big', 'blink', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'command', 'content', 'data', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog', 'dir', 'div', 'dl', 'dt', 'element', 'em', 'embed', 'fieldset', 'figcaption', 'figure', 'font', 'footer', 'form', 'frame', 'frameset', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'iframe', 'image', 'img', 'input', 'ins', 'isindex', 'kbd', 'keygen', 'label', 'legend', 'li', 'link', 'listing', 'main', 'map', 'mark', 'marquee', 'menu', 'menuitem', 'meta', 'meter', 'multicol', 'nav', 'nobr', 'noembed', 'noframes', 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p', 'param', 'picture', 'plaintext', 'pre', 'progress', 'q', 'rp', 'rt', 'rtc', 'ruby', 's', 'samp', 'script', 'section', 'select', 'shadow', 'small', 'source', 'spacer', 'span', 'strike', 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'tt', 'u', 'ul', 'var', 'video', 'wbr', 'xmp', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
 
 },{}],4:[function(require,module,exports){
+'use strict';
+
+function add () {
+	if(arguments.length === 0) return this;
+
+	try{
+		var len = arguments.length;
+		for (var i = 0; i < len; i++) {
+			inserElement(this.element, arguments[i]);
+		}
+	}catch(e){
+		this.debug(e);
+	}
+
+	return this;
+}
+
+function inserElement (parent, child) {
+	if(!child || !parent) return;
+
+	if(Object.prototype.toString.call(child) === "[object Array]"){
+		insertArray(parent, child);
+	}else{
+		parent.appendChild(child.get());
+	}
+}
+
+function insertArray (parent, array) {
+	var i, len;
+
+	var frag = document.createDocumentFragment();
+
+	len = array.length;
+
+	for (i = 0; i < len; i++) {
+		if(Object.prototype.toString.call(array[i]) === "[object Array]")
+			insertArray(parent, array[i]);
+		else if(array[i])
+			frag.appendChild(array[i].get());
+	}
+
+	parent.appendChild(frag);
+}
+
+module.exports = function (engine) {
+	engine.injectPlugin('add', add);
+};
+
+},{}],5:[function(require,module,exports){
+'use strict';
+
+function attr (attribute, text) {
+
+	if(arguments.length === 1) return get.call(this, attribute);
+	if(arguments.length === 2) return set.call(this, attribute, text);
+
+	return this;
+}
+
+function set (attribute, text) {
+	this.element.setAttribute(attribute, text);
+	return this;}
+
+function get (attribute) {
+	return this.element.getAttribute(attribute);
+}
+
+module.exports = function (engine) {
+	engine.injectPlugin('attr', attr);
+};
+
+},{}],6:[function(require,module,exports){
+'use strict';
+
+function clas (text) {
+	if(arguments <= 0) return get.call(this);
+	else return set.call(this, text);
+}
+
+function set (text) {
+	this.element.className = text;
+	return this;
+}
+
+function get () {
+	return this.element.className;
+}
+
+function add () {
+	this.element.classList.add.apply(this.element.classList, arguments);
+	return this;
+}
+
+function remove () {
+	this.element.classList.remove.apply(this.element.classList, arguments);
+	return this;
+}
+
+function toggle () {
+	this.element.classList.toggle.apply(this.element.classList, arguments);
+	return this;
+}
+
+function contains () {
+	return this.element.classList.contains.apply(this.element.classList, arguments);
+}
+
+
+module.exports = function (engine) {
+	engine.injectPlugin('class', clas);
+	engine.injectPlugin('addClass', add);
+	engine.injectPlugin('removeClass', remove);
+	engine.injectPlugin('toggleClass', toggle);
+	engine.injectPlugin('containsClass', contains);
+};
+
+},{}],7:[function(require,module,exports){
+'use strict';
+
+function remove (child) {
+	if(arguments.length <= 0) return this;
+
+	if(Object.prototype.toString.call(child) === "[object Array]"){
+		var len = child.length;
+		for (var i = 0; i < len; i++) {
+			remove.call(this, child[i]);
+		}
+	}else{
+		if(typeof child.get !== 'undefined')
+			child = child.get();
+
+		this.element.removeChild(child);
+	}
+
+	return this;
+}
+
+module.exports = function (engine) {
+	engine.injectPlugin('remove', remove);
+};
+
+},{}],8:[function(require,module,exports){
+'use strict';
+
+function style (name, rule) {
+	if(arguments.length === 0) return this.element.style;
+	if(arguments.length === 1) return get.call(this, name);
+	else return set.call(this, name, rule);
+}
+
+function set (name, rule) {
+	this.element.style[name] = rule;
+	return this;
+}
+
+function get (name) {
+	return this.element.style[name];
+}
+
+module.exports = function (engine) {
+	engine.injectPlugin('style', style);
+};
+
+},{}],9:[function(require,module,exports){
+'use strict';
+
+function text (textValue) {
+
+	if(arguments.length === 0) return get.call(this);
+	if(arguments.length === 1) return set.call(this, textValue);
+
+	return this;
+}
+
+function set (textValue) {
+
+	if(this.element.nodeName === '#text'){
+		this.element.nodeValue = textValue;
+		return this;
+	}
+
+	this.element.firstChild.nodeValue = textValue;
+	return this;
+}
+
+function get (textValue) {
+	if(this.element.nodeName === '#text')
+		return this.element.nodeValue;
+
+	return this.element.firstChild.nodeValue;
+}
+
+module.exports = function (engine) {
+	engine.injectPlugin('text', text);
+};
+
+},{}],10:[function(require,module,exports){
+'use strict';
+
+function variable (varName, param) {
+
+	if(arguments.length === 1) return get.call(this, varName);
+	if(arguments.length === 2) return set.call(this, varName, param);
+
+	return this;
+}
+
+function set (varName, param) {
+	this[varName] = param;
+	return this;
+}
+
+function get (varName) {
+	return this[varName];
+}
+
+function save (obj, name) {
+	if(arguments.length > 0 && obj !== null)
+		obj[name] = this;
+
+	return this;
+}
+
+module.exports = function (engine) {
+	engine.injectPlugin('var', variable);
+	engine.injectPlugin('save', save);
+};
+
+},{}],11:[function(require,module,exports){
+'use strict';
+
+function text (document, textValue) {
+	this.element = document.createTextNode(textValue);
+}
+
+module.exports = function (engine) {
+	engine.createTag('text', text);
+};
+
+},{}],12:[function(require,module,exports){
 
 /**
  * This is the web browser implementation of `debug()`.
@@ -289,7 +530,7 @@ function localstorage(){
   } catch (e) {}
 }
 
-},{"./debug":5}],5:[function(require,module,exports){
+},{"./debug":13}],13:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -488,7 +729,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":6}],6:[function(require,module,exports){
+},{"ms":14}],14:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -612,245 +853,5 @@ function plural(ms, n, name) {
   if (ms < n * 1.5) return Math.floor(ms / n) + ' ' + name;
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
-
-},{}],7:[function(require,module,exports){
-'use strict';
-
-function add () {
-	if(arguments.length === 0) return this;
-
-	try{
-		var len = arguments.length;
-		for (var i = 0; i < len; i++) {
-			inserElement(this.element, arguments[i]);
-		}
-	}catch(e){
-		this.debug(e);
-	}
-
-	return this;
-}
-
-function inserElement (parent, child) {
-	if(!child || !parent) return;
-
-	if(Object.prototype.toString.call(child) === "[object Array]"){
-		insertArray(parent, child);
-	}else{
-		parent.appendChild(child.get());
-	}
-}
-
-function insertArray (parent, array) {
-	var i, len;
-
-	var frag = document.createDocumentFragment();
-
-	len = array.length;
-
-	for (i = 0; i < len; i++) {
-		if(Object.prototype.toString.call(array[i]) === "[object Array]")
-			insertArray(parent, array[i]);
-		else if(array[i])
-			frag.appendChild(array[i].get());
-	}
-
-	parent.appendChild(frag);
-}
-
-module.exports = function (engine) {
-	engine.injectPlugin('add', add);
-};
-
-},{}],8:[function(require,module,exports){
-'use strict';
-
-function attr (attribute, text) {
-
-	if(arguments.length === 1) return get.call(this, attribute);
-	if(arguments.length === 2) return set.call(this, attribute, text);
-
-	return this;
-}
-
-function set (attribute, text) {
-	this.element.setAttribute(attribute, text);
-	return this;}
-
-function get (attribute) {
-	return this.element.getAttribute(attribute);
-}
-
-module.exports = function (engine) {
-	engine.injectPlugin('attr', attr);
-};
-
-},{}],9:[function(require,module,exports){
-'use strict';
-
-function clas (text) {
-	if(arguments <= 0) return get.call(this);
-	else return set.call(this, text);
-}
-
-function set (text) {
-	this.element.className = text;
-	return this;
-}
-
-function get () {
-	return this.element.className;
-}
-
-function add () {
-	this.element.classList.add.apply(this.element.classList, arguments);
-	return this;
-}
-
-function remove () {
-	this.element.classList.remove.apply(this.element.classList, arguments);
-	return this;
-}
-
-function toggle () {
-	this.element.classList.toggle.apply(this.element.classList, arguments);
-	return this;
-}
-
-function contains () {
-	return this.element.classList.contains.apply(this.element.classList, arguments);
-}
-
-
-module.exports = function (engine) {
-	engine.injectPlugin('class', clas);
-	engine.injectPlugin('addClass', add);
-	engine.injectPlugin('removeClass', remove);
-	engine.injectPlugin('toggleClass', toggle);
-	engine.injectPlugin('containsClass', contains);
-};
-
-},{}],10:[function(require,module,exports){
-'use strict';
-
-function remove (child) {
-	if(arguments.length <= 0) return this;
-
-	if(Object.prototype.toString.call(child) === "[object Array]"){
-		var len = child.length;
-		for (var i = 0; i < len; i++) {
-			remove.call(this, child[i]);
-		}
-	}else{
-		if(typeof child.get !== 'undefined')
-			child = child.get();
-
-		this.element.removeChild(child);
-	}
-
-	return this;
-}
-
-module.exports = function (engine) {
-	engine.injectPlugin('remove', remove);
-};
-
-},{}],11:[function(require,module,exports){
-'use strict';
-
-function style (name, rule) {
-	if(arguments.length === 0) return this.element.style;
-	if(arguments.length === 1) return get.call(this, name);
-	else return set.call(this, name, rule);
-}
-
-function set (name, rule) {
-	this.element.style[name] = rule;
-	return this;
-}
-
-function get (name) {
-	return this.element.style[name];
-}
-
-module.exports = function (engine) {
-	engine.injectPlugin('style', style);
-};
-
-},{}],12:[function(require,module,exports){
-'use strict';
-
-function text (textValue) {
-
-	if(arguments.length === 0) return get.call(this);
-	if(arguments.length === 1) return set.call(this, textValue);
-
-	return this;
-}
-
-function set (textValue) {
-
-	if(this.element.nodeName === '#text'){
-		this.element.nodeValue = textValue;
-		return this;
-	}
-
-	this.element.firstChild.nodeValue = textValue;
-	return this;
-}
-
-function get (textValue) {
-	if(this.element.nodeName === '#text')
-		return this.element.nodeValue;
-
-	return this.element.firstChild.nodeValue;
-}
-
-module.exports = function (engine) {
-	engine.injectPlugin('text', text);
-};
-
-},{}],13:[function(require,module,exports){
-'use strict';
-
-function variable (varName, param) {
-
-	if(arguments.length === 1) return get.call(this, varName);
-	if(arguments.length === 2) return set.call(this, varName, param);
-
-	return this;
-}
-
-function set (varName, param) {
-	this[varName] = param;
-	return this;
-}
-
-function get (varName) {
-	return this[varName];
-}
-
-function save (obj, name) {
-	if(arguments.length > 0 && obj !== null)
-		obj[name] = this;
-
-	return this;
-}
-
-module.exports = function (engine) {
-	engine.injectPlugin('var', variable);
-	engine.injectPlugin('save', save);
-};
-
-},{}],14:[function(require,module,exports){
-'use strict';
-
-function text (doc, textValue) {
-	this.element = doc.createTextNode(textValue);
-}
-
-module.exports = function (engine) {
-	engine.createTag('text', text);
-};
 
 },{}]},{},[1]);
