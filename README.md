@@ -7,7 +7,7 @@ It's a small and powerful core with a plugins system that can extend almost ever
 
 You can create new HTML tags, new methods and reusable modules with complex templates and logic.
 
-##A template example
+## A template example
 
 ``` javascript
 
@@ -57,8 +57,8 @@ You can create new HTML tags, new methods and reusable modules with complex temp
 
 	'use strict';
 
-	function text (doc, textValue) {
-		this.element = doc.createTextNode(textValue);
+	function text (document, textValue) {
+		this.element = document.createTextNode(textValue);
 	}
 
 	module.exports = function (engine) {
@@ -121,7 +121,7 @@ The DOM element is accessible via `this.element`
 
 	var d = require('dom-wrapper');
 
-	function form (doc, className) {
+	function form (document, className) {
 		this.references = {};
 
 		var dom = d.form('my super form').addClass(className).add(
@@ -155,5 +155,47 @@ And then:
 
 	var domWrapper = require('dom-wrapper');
 	require('simpleForm.js')(domWrapper);
+
+```
+
+## Specifying a different document variable
+
+In the browser you can use `document` for creating `DOM`. In node or other engines you do not have a `document` variable globally accesible.
+
+You can use `setDocument()` for suply a alternative implementor of DOM interface.
+
+```
+
+	'use strict';
+
+	var document = require('my-document-implementor');
+	var d = require('dom-wrapper').setDocument(document);
+
+```
+
+## Using tags directly as functions without dot `.` operator.
+
+JavaScript has the `with` statement. Let's be clear: __It's dangeorus and can prevent the engine to make certain optimizations.__
+
+Nevertheless, there is a few cases when the `with` statement is justified. In a template system where HTML tags are mapped with functions in an object, I found that the `with` statement can be helpful.
+
+_Note: The `with` statement is forbidden  in with `'use strict'`_
+
+```
+
+	var d = require('dom-wrapper')
+
+	var dom;
+
+	with(d){
+		dom = div().add(
+			h1()text('My articles'),
+			a().text('My link').attr('href', 'www.mywebsite.com')
+			article().add(
+				p().text('Hello world!'),
+				p().text('¿Where is defined the p function?')
+			)
+		).get();
+	}
 
 ```

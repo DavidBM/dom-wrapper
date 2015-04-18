@@ -1,7 +1,7 @@
 'use strict';
 
-function text (doc, textValue) {
-	this.element = doc.createTextNode(textValue);
+function text (document, textValue) {
+	this.element = document.createTextNode(textValue);
 }
 
 module.exports = function (engine) {

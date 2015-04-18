@@ -45,6 +45,7 @@ function createElementWrapper (tagName) {
 //Core wrapper utilities
 engine.setDocument = function (newDocument) {
 	doc = newDocument;
+	return this;
 };
 
 engine.injectPlugin = function (name, injectFunction) {
