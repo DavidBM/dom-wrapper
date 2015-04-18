@@ -179,7 +179,7 @@ JavaScript has the `with` statement. Let's be clear: __It's dangeorus and can pr
 
 Nevertheless, there is a few cases when the `with` statement is justified. In a template system where HTML tags are mapped with functions in an object, I found that the `with` statement can be helpful.
 
-_Note: The `with` statement is forbidden  in with `'use strict'`_
+_Note: The `with` statement is forbidden with `'use strict'`._
 
 ```
 
@@ -189,7 +189,7 @@ _Note: The `with` statement is forbidden  in with `'use strict'`_
 
 	with(d){
 		dom = div().add(
-			h1()text('My articles'),
+			h1().text('My articles'),
 			a().text('My link').attr('href', 'www.mywebsite.com')
 			article().add(
 				p().text('Hello world!'),
