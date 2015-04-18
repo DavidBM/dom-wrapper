@@ -37,7 +37,7 @@ or copy the bundle/dom-wrapper.min.js to your project and then use `window.DomWr
 			d.p('My laaaaaarge text'),
 			d.p('My laaaaaarge text'),
 			d.p('My laaaaaarge text'),
-			getComments() //Ypu can put arrays and params and the engine merges alls in the correct order.
+			getComments() //You can put arrays and params and the engine merges alls in the correct order.
 		)
 	).get();
 
