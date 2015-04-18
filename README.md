@@ -164,7 +164,7 @@ In the browser you can use `document` for creating `DOM`. In node or other engin
 
 You can use `setDocument()` for suply a alternative implementor of DOM interface.
 
-```
+``` javascript
 
 	'use strict';
 
@@ -181,7 +181,7 @@ Nevertheless, there is a few cases when the `with` statement is justified. In a 
 
 _Note: The `with` statement is forbidden with `'use strict'`._
 
-```
+``` javascript
 
 	var d = require('dom-wrapper')
 
