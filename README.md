@@ -25,34 +25,34 @@ or copy the bundle/dom-wrapper.min.js to your project and then use `window.DomWr
 
 	var references = {};
 
-	var articles = {
-		'HTML Templates': "Html templates are cool!",
-		'Dom-Wrapper': "But JavaScript is coolest!"
-	};
+	var dom =
+	d.section().add(
+		d.nav().add(
+			d.a().text('Home'),
+			d.a().text('Me'),
+			d.a().text('Contact')
+		),
+		d.article().add(
+			d.h1().class('my-class').text('My title').save(references, 'title'), //We save this tag for changing it in a future
+			d.p('My laaaaaarge text'),
+			d.p('My laaaaaarge text'),
+			d.p('My laaaaaarge text'),
+			getComments() //Ypu can put arrays and params and the engine merges alls in the correct order.
+		)
+	).get();
 
-	document.body.appendChild(
-		d.div().add(
-			d.h1('css-class').addClass('css-class2').add(
-				d.text('My articles').save(references, 'header')
-			),
-			doArticles()
-		).get()
-	);
+	document.body.appendChild(dom);
 
-	references.header.text("My favourite articles");
+	references.title.text("My SUPER title"); //changing props after inserted
 
-	function doArticles () {
-		var dom = [];
+	function getComments () { //Some sync logic.
+		var comments = [];
 
-		for(var articleName in articles){
-			dom.push(
-				d.article().add(
-					d.h1('article-title').add(d.text(articleName)),
-					d.p('article-body').add(d.text(articles[articleName]))
-				)
-			);
-		}
-		return dom;
+		comments.push(d.p().text("Hello, I'm a comment"));
+		comments.push(d.p().text("Hello, I'm a comment"));
+		comments.push(d.p().text("Hello, I'm a comment"));
+
+		return comments;
 	}
 
 ```
@@ -211,3 +211,5 @@ _Note: The `with` statement is forbidden with `'use strict'`._
 ## Roadmap
 
  - Use getters for save from use parentheses
+ - Add fragment tag
+ - Add event plugin
