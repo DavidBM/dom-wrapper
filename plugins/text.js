@@ -1,5 +1,7 @@
 'use strict';
 
+var dw = null;
+
 function text (textValue) {
 
 	if(arguments.length === 0) return get.call(this);
@@ -15,7 +17,11 @@ function set (textValue) {
 		return this;
 	}
 
-	this.element.firstChild.nodeValue = textValue;
+	if(this.element.firstChild && this.element.firstChild.nodeName === "#text")
+		this.element.firstChild.nodeValue = textValue;
+
+	this.add(dw.text(textValue));
+
 	return this;
 }
 
@@ -28,4 +34,5 @@ function get (textValue) {
 
 module.exports = function (engine) {
 	engine.injectPlugin('text', text);
+	dw = engine;
 };
