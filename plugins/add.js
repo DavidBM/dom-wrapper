@@ -20,6 +20,8 @@ function inserElement (parent, child) {
 
 	if(Object.prototype.toString.call(child) === "[object Array]"){
 		insertArray(parent, child);
+	}else if(child instanceof HTMLElement){ //TODO, is using the global object. Find a way to detect DOM element without using global context.
+		parent.appendChild(child);
 	}else{
 		parent.appendChild(child.get());
 	}
@@ -33,9 +35,13 @@ function insertArray (parent, array) {
 	len = array.length;
 
 	for (i = 0; i < len; i++) {
-		if(Object.prototype.toString.call(array[i]) === "[object Array]")
+		if(Object.prototype.toString.call(array[i]) === "[object Array]"){
 			insertArray(parent, array[i]);
-		else if(array[i])
+
+		}else if(array[i] instanceof HTMLElement){ //TODO, is using the global object. Find a way to detect DOM element without using global context.
+			frag.appendChild(array[i]);
+
+		}else if(array[i])
 			frag.appendChild(array[i].get());
 	}
 
