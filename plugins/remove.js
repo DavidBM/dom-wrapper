@@ -18,6 +18,14 @@ function remove (child) {
 	return this;
 }
 
+function removeAll () {
+	while (this.element.firstChild)
+		this.element.removeChild(this.element.firstChild);
+
+	return this;
+}
+
 module.exports = function (engine) {
 	engine.injectPlugin('remove', remove);
+	engine.injectPlugin('removeAll', removeAll);
 };
