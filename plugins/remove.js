@@ -25,7 +25,14 @@ function removeAll () {
 	return this;
 }
 
+function detach () {
+	if(!this.element.parent) return;
+
+	this.element.parent.removeChild(this.element);
+}
+
 module.exports = function (engine) {
 	engine.injectPlugin('remove', remove);
 	engine.injectPlugin('removeAll', removeAll);
+	engine.injectPlugin('detach', detach);
 };
