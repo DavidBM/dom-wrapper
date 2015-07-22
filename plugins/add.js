@@ -20,7 +20,7 @@ function inserElement (parent, child) {
 
 	if(Object.prototype.toString.call(child) === "[object Array]"){
 		insertArray(parent, child);
-	}else if(child instanceof HTMLElement){ //TODO, is using the global object. Find a way to detect DOM element without using global context.
+	}else if(child instanceof HTMLElement || child instanceof DocumentFragment){ //TODO, is using the global object. Find a way to detect DOM element without using global context.
 		parent.appendChild(child);
 	}else{
 		parent.appendChild(child.get());
