@@ -12,6 +12,7 @@
 	require('./plugins/text.js')(engine);
 	require('./plugins/utils.js')(engine);
 	require('./tags/text.js')(engine);
+	require('./tags/fragment.js')(engine);
 
 
 	if(typeof module !== 'undefined' && module.exports){
