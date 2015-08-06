@@ -26,9 +26,9 @@ function removeAll () {
 }
 
 function detach () {
-	if(!this.element.parent) return;
+	if(!this.element.parentNode) return;
 
-	this.element.parent.removeChild(this.element);
+	this.element.parentNode.removeChild(this.element);
 }
 
 module.exports = function (engine) {
