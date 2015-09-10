@@ -15,22 +15,45 @@ function get () {
 }
 
 function add () {
-	this.element.classList.add.apply(this.element.classList, arguments);
+	var args = checkArguments(arguments);
+	if(args.length <= 0) return this;
+
+	this.element.classList.add.apply(this.element.classList, args);
 	return this;
 }
 
 function remove () {
-	this.element.classList.remove.apply(this.element.classList, arguments);
+	var args = checkArguments(arguments);
+	if(args.length <= 0) return this;
+
+	this.element.classList.remove.apply(this.element.classList, args);
 	return this;
 }
 
 function toggle () {
-	this.element.classList.toggle.apply(this.element.classList, arguments);
+	var args = checkArguments(arguments);
+	if(args.length <= 0) return this;
+
+	this.element.classList.toggle.apply(this.element.classList, args);
 	return this;
 }
 
 function contains () {
-	return this.element.classList.contains.apply(this.element.classList, arguments);
+	var args = checkArguments(arguments);
+	if(args.length <= 0) return this;
+
+	return this.element.classList.contains.apply(this.element.classList, args);
+}
+
+function checkArguments (args) {
+	var result = [];
+	if(args.length <= 0) return result;
+
+	for (var i = args.length - 1; i >= 0; i--) {
+		if(args[i]) result.push(args[i]);
+	}
+
+	return result;
 }
 
 
