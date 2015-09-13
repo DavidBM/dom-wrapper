@@ -1,6 +1,6 @@
 {
   "name": "dom-wrapper",
-  "version": "0.6.3",
+  "version": "0.7.3",
   "description": "An extensible DOM Wrapper that adds a facilities for use DOM in JavaScript.",
   "private": false,
   "main": "index.js",
