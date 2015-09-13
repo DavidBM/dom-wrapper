@@ -6,7 +6,7 @@ function add () {
 	try{
 		var len = arguments.length;
 		for (var i = 0; i < len; i++) {
-			inserElement(this.element, arguments[i]);
+			inserElement(this.element, arguments[i], false);
 		}
 	}catch(e){
 		this.debug(e);
@@ -15,19 +15,34 @@ function add () {
 	return this;
 }
 
-function inserElement (parent, child) {
+function prepend () {
+	if(arguments.length === 0) return this;
+
+	try{
+		var len = arguments.length;
+		for (var i = 0; i < len; i++) {
+			inserElement(this.element, arguments[i], true);
+		}
+	}catch(e){
+		this.debug(e);
+	}
+
+	return this;
+}
+
+function inserElement (parent, child, prepend) {
 	if(!child || !parent) return;
 
 	if(Object.prototype.toString.call(child) === "[object Array]"){
-		insertArray(parent, child);
+		insertArray(parent, child, prepend);
 	}else if(child instanceof HTMLElement || child instanceof DocumentFragment){ //TODO, is using the global object. Find a way to detect DOM element without using global context.
-		parent.appendChild(child);
+		insertElementDom(parent, child, prepend);
 	}else{
-		parent.appendChild(child.get());
+		insertElementDom(parent, child.get(), prepend);
 	}
 }
 
-function insertArray (parent, array) {
+function insertArray (parent, array, prepend) {
 	var i, len;
 
 	var frag = document.createDocumentFragment();
@@ -36,18 +51,28 @@ function insertArray (parent, array) {
 
 	for (i = 0; i < len; i++) {
 		if(Object.prototype.toString.call(array[i]) === "[object Array]"){
-			insertArray(parent, array[i]);
+			insertArray(parent, array[i], prepend);
 
 		}else if(array[i] instanceof HTMLElement){ //TODO, is using the global object. Find a way to detect DOM element without using global context.
-			frag.appendChild(array[i]);
+			insertElementDom(frag, array[i], prepend);
 
 		}else if(array[i])
-			frag.appendChild(array[i].get());
+			insertElementDom(frag, array[i].get(), prepend);
 	}
 
 	parent.appendChild(frag);
 }
 
+function insertElementDom (parent, child, prepend) {
+	var firstChild = parent.firstChild;
+
+	if(!prepend || !firstChild)
+		return parent.appendChild(child);
+
+	return prepend.insertBefore(child, firstChild);
+}
+
 module.exports = function (engine) {
 	engine.injectPlugin('add', add);
+	engine.injectPlugin('prepend', prepend);
 };
