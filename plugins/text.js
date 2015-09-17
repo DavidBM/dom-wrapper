@@ -18,11 +18,12 @@ function set (textValue) {
 		return this;
 	}
 
-	if(this.element.firstChild && this.element.firstChild.nodeName === "#text")
+	if(this.element.firstChild && this.element.firstChild.nodeName === "#text"){
 		this.element.firstChild.nodeValue = textValue;
+		return this;
+	}
 
 	this.add(dw.text(textValue));
-
 	return this;
 }
 
