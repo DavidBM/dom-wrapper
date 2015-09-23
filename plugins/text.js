@@ -11,7 +11,7 @@ function text (textValue) {
 }
 
 function set (textValue) {
-	if(!textValue) return this;
+	if(!textValue && textValue !== 0) return this;
 
 	if(this.element.nodeName === '#text'){
 		this.element.nodeValue = textValue;
