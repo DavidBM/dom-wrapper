@@ -56,7 +56,7 @@ engine.injectPlugin = function (name, injectFunction) {
 };
 
 engine.createTag = function (tagName, postFunction) {
-	if(typeof plugins[name] !== "undefined") return;
+	if(typeof engine[tagName] !== "undefined") return;
 
 	var wrapper = createElementWrapper(tagName);
 
